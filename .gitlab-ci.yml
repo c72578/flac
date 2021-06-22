@@ -8,7 +8,7 @@ autotools:
   stage: build
   before_script:
     - apt-get update &&
-      apt-get install -y libogg-dev gettext zip
+      apt-get install -y libogg-dev gettext doxygen zip
   script:
     - ./autogen.sh
     - ./configure
@@ -19,16 +19,8 @@ cmake:
   stage: build
   before_script:
     - apt-get update &&
-      apt-get install -y cmake ninja-build
+      apt-get install -y libogg-dev cmake ninja-build
   script:
     - mkdir _build
     - cmake -S . -B _build -G "Ninja" -DCMAKE_BUILD_TYPE=Release
     - cmake --build _build
-
-doc:
-  stage: build
-  before_script:
-    - apt-get update &&
-      apt-get install -y doxygen graphviz
-  script:
-    - make -C doc -f Makefile.lite
