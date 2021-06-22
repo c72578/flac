@@ -8,7 +8,7 @@ autotools:
   stage: build
   before_script:
     - apt-get update &&
-      apt-get install -y libogg-dev libtool gettext doxygen zip
+      apt-get install -y libogg-dev libtool-bin gettext doxygen zip
   script:
     - ./autogen.sh
     - ./configure
