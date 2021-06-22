@@ -8,7 +8,7 @@ autotools:
   stage: build
   before_script:
     - apt-get update &&
-      apt-get install -y libogg-dev gettext doxygen zip
+      apt-get install -y libogg-dev libtool gettext doxygen zip
   script:
     - ./autogen.sh
     - ./configure
@@ -19,7 +19,7 @@ cmake:
   stage: build
   before_script:
     - apt-get update &&
-      apt-get install -y libogg-dev cmake ninja-build
+      apt-get install -y libogg-dev doxygen cmake ninja-build
   script:
     - mkdir _build
     - cmake -S . -B _build -G "Ninja" -DCMAKE_BUILD_TYPE=Release
