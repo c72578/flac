@@ -8,8 +8,7 @@ autotools:
   stage: build
   before_script:
     - apt-get update &&
-      apt-get install -y libogg-dev
-        zip
+      apt-get install -y libogg-dev gettext zip
   script:
     - ./autogen.sh
     - ./configure
