@@ -36,16 +36,8 @@ makefile:
   before_script:
     - apt-get update &&
       apt-get install -y libogg-dev
-    # Create an unpriviledged user, required for tests.
-    - adduser --disabled-password --gecos "Gitlab CI" flac
   script:
     # The makefile doesn't create the `objs` tree it expects to use.
-    - rm -rf objs
     - mkdir -p objs/release/lib
     - mkdir -p objs/release/bin
-    - mkdir -p objs/debug/lib
-    - mkdir -p objs/debug/bin
-    # Release build
     - make -f Makefile.lite
-    # Run tests on the debug build
-    - su -c 'make -f Makefile.lite test' flac
