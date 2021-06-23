@@ -2,7 +2,7 @@ default:
   tags:
     - docker
   # Image from https://hub.docker.com/_/gcc/ based on Debian
-  image: registry.gitlab.xiph.org/xiph/flac/flac-ci:latest
+  image: gcc:9
 
 autotools:
   stage: build
@@ -11,11 +11,13 @@ autotools:
       apt-get install -y libogg-dev
         libtool-bin gettext zip
         doxygen graphviz
+    # Create an unpriviledged user, required for tests.
+    - adduser -D flac
   script:
     - ./autogen.sh
     - ./configure
     - make
-    - make distcheck
+    - su -c 'make distcheck' flac
 
 cmake:
   stage: build
@@ -34,6 +36,8 @@ makefile:
   before_script:
     - apt-get update &&
       apt-get install -y libogg-dev
+    # Create an unpriviledged user, required for tests.
+    - adduser -D flac
   script:
     # The makefile doesn't create the `objs` tree it expects to use.
     - rm -rf objs
@@ -44,4 +48,4 @@ makefile:
     # Release build
     - make -f Makefile.lite
     # Run tests on the debug build
-    - make -f Makefile.lite test
+    - su -c 'make -f Makefile.lite test' flac
