@@ -12,7 +12,7 @@ autotools:
         libtool-bin gettext zip
         doxygen graphviz
     # Create an unpriviledged user, required for tests.
-    - adduser -D flac
+    - adduser --disabled-password flac
   script:
     - ./autogen.sh
     - ./configure
@@ -37,7 +37,7 @@ makefile:
     - apt-get update &&
       apt-get install -y libogg-dev
     # Create an unpriviledged user, required for tests.
-    - adduser -D flac
+    - adduser --disabled-password flac
   script:
     # The makefile doesn't create the `objs` tree it expects to use.
     - rm -rf objs
