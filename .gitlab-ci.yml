@@ -30,6 +30,7 @@ cmake:
     - mkdir _build
     - cmake -S . -B _build -G "Ninja" -DCMAKE_BUILD_TYPE=Release
     - cmake --build _build
+    - cd _build && ctest -V
 
 makefile:
   stage: build
