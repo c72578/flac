@@ -155,4 +155,4 @@ jobs:
         if: ${{ failure() && startsWith(matrix.build-system,'cmake') }}
         with:
           name: streams.log
-          path: test/streams.log
+          path: ./**/*.log
