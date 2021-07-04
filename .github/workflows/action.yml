@@ -138,6 +138,20 @@ jobs:
           make
           make check
 
+      - name: Debug build with CMake test with stack trace
+        if: startsWith(matrix.build-system,'cmake')
+        env:
+          CC: ${{ matrix.cc }}
+          CXX: ${{ matrix.cxx }}
+        run: |
+          mkdir cmake-build
+          cd cmake-build
+          cmake .. -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ${{ matrix.configure-opts }} -DCMAKE_FIND_FRAMEWORK=NEVER
+          cmake --build .
+          cd test
+          echo -n "run --verify --silent --force --force-raw-format --endian=little --sign=signed --sample-rate=44100 --bps=16 --channels=2 -8  --lax -b 65535  --no-padding noise.raw\nbt\nquit" | lldb ../src/flac/flac
+          echo -n "run --verify --silent --force --force-raw-format --endian=little --sign=signed --sample-rate=44100 --bps=16 --channels=2 -8  --lax -b 65535  --no-padding noise.raw\nbt\nquit" | gdb ../src/flac/flac
+
       - name: Build with CMake
         if: startsWith(matrix.build-system,'cmake')
         env:
@@ -149,9 +163,6 @@ jobs:
           cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ${{ matrix.configure-opts }} -DCMAKE_FIND_FRAMEWORK=NEVER
           cmake --build .
           ctest -V
-          cd test
-          echo -n "run --verify --silent --force --force-raw-format --endian=little --sign=signed --sample-rate=44100 --bps=16 --channels=2 -8  --lax -b 65535  --no-padding noise.raw\nbt\nquit" | lldb ../src/flac/flac
-          echo -n "run --verify --silent --force --force-raw-format --endian=little --sign=signed --sample-rate=44100 --bps=16 --channels=2 -8  --lax -b 65535  --no-padding noise.raw\nbt\nquit" | gdb ../src/flac/flac
 
       - name: Upload ctest logs
         uses: actions/upload-artifact@v2
