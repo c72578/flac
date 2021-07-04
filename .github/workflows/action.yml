@@ -169,5 +169,5 @@ jobs:
         uses: actions/upload-artifact@v2
         if: ${{ failure() && startsWith(matrix.build-system,'cmake') }}
         with:
-          name: flac-${{ github.sha }}-${{ github.job }}-ctest-logs
+          name: flac-${{ github.sha }}-${{ github.run_id }}-ctest-logs
           path: ./**/*.log
