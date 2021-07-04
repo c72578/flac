@@ -121,11 +121,12 @@ jobs:
           brew update
           brew install automake pkg-config libogg
 
-      - name: Install Lunux dependencies
+      - name: Install Linux dependencies
         if: startsWith(matrix.os,'ubuntu')
         run: |
           sudo apt-get update
           sudo apt-get install -y libtool-bin libogg-dev doxygen libxml2-utils w3c-sgml-lib
+          sudo apt-get install -y gdb lldb
 
       - name: Build with Autotools
         if: startsWith(matrix.build-system,'autotools')
