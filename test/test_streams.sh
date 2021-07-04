@@ -62,6 +62,7 @@ test_file ()
 	echo "### ENCODE $name #######################################################" >> ./streams.log
 	echo "###    cmd=$cmd" >> ./streams.log
 	if ! $cmd 2>>./streams.log; then
+	  echo "FAIL"
 	  lldb --batch --one-line "run $cmd_opts" --one-line-on-crash "bt" flac
 	  die "ERROR during encode of $name"
 	fi
