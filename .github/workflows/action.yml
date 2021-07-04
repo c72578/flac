@@ -126,7 +126,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libtool-bin libogg-dev doxygen libxml2-utils w3c-sgml-lib
-          sudo apt-get install -y gdb lldb
+          sudo apt-get install -y lldb
 
       - name: Build with Autotools
         if: startsWith(matrix.build-system,'autotools')
@@ -139,21 +139,6 @@ jobs:
           make
           make check
 
-      - name: Debug build with CMake test with stack trace
-        if: startsWith(matrix.build-system,'cmake')
-        env:
-          CC: ${{ matrix.cc }}
-          CXX: ${{ matrix.cxx }}
-        run: |
-          mkdir cmake-build-debug
-          cd cmake-build-debug
-          cmake .. -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ${{ matrix.configure-opts }} -DCMAKE_FIND_FRAMEWORK=NEVER
-          cmake --build .
-          cd test
-          ../src/test_streams/test_streams
-          echo -e 'run --verify --silent --force --force-raw-format --endian=little --sign=signed --sample-rate=44100 --bps=16 --channels=2 -8  --lax -b 65535  --no-padding noise.raw\nbt\nquit' | lldb ../src/flac/flac
-          echo -e 'run --verify --silent --force --force-raw-format --endian=little --sign=signed --sample-rate=44100 --bps=16 --channels=2 -8  --lax -b 65535  --no-padding noise.raw\nbt\nquit' | gdb ../src/flac/flac
-
       - name: Build with CMake
         if: startsWith(matrix.build-system,'cmake')
         env:
@@ -165,6 +150,12 @@ jobs:
           cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ${{ matrix.configure-opts }} -DCMAKE_FIND_FRAMEWORK=NEVER
           cmake --build .
           ctest -V
+
+      - name: CMake test failures stack trace
+        if: ${{ failure() && startsWith(matrix.build-system,'cmake') }}
+        run: |
+          cd cmake-build/test
+          echo -e 'run --verify --silent --force --force-raw-format --endian=little --sign=signed --sample-rate=44100 --bps=16 --channels=2 -8  --lax -b 65535  --no-padding noise.raw\nbt\nquit' | lldb ../src/flac/flac
 
       - name: Upload ctest logs
         uses: actions/upload-artifact@v2
