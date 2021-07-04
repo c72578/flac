@@ -145,8 +145,8 @@ jobs:
           CC: ${{ matrix.cc }}
           CXX: ${{ matrix.cxx }}
         run: |
-          mkdir cmake-build
-          cd cmake-build
+          mkdir cmake-build-debug
+          cd cmake-build-debug
           cmake .. -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ${{ matrix.configure-opts }} -DCMAKE_FIND_FRAMEWORK=NEVER
           cmake --build .
           cd test
