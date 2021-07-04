@@ -61,7 +61,7 @@ test_file ()
 	cmd="run_flac $cmd_opts"
 	echo "### ENCODE $name #######################################################" >> ./streams.log
 	echo "###    cmd=$cmd" >> ./streams.log
-	$cmd 2>>./streams.log || $( echo -e "$cmd_opts" | lldb flac" && die "ERROR during encode of $name")
+	$cmd 2>>./streams.log || $( echo -e "$cmd_opts" | lldb flac && die "ERROR during encode of $name" )
 
 	echo $ECHO_N "decode..." $ECHO_C
 	cmd="run_flac --silent --force --endian=little --sign=signed --decode --force-raw-format --output-name=$name.cmp $name.flac"
